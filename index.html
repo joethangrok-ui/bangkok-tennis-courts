@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bangkok tennis courts</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --border: #2d3a4f;
+      --text: #e8eef6;
+      --muted: #8b9bb4;
+      --accent: #3dd68c;
+      --accent-dim: #2a9d64;
+      --chip: #2a3548;
+      --link: #6db3ff;
+      --warn: #f0c14b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+    header {
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin: 0 0 0.75rem;
+      font-size: 0.95rem;
+    }
+    .banner {
+      background: rgba(240, 193, 75, 0.12);
+      border: 1px solid rgba(240, 193, 75, 0.35);
+      color: var(--warn);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+    }
+    .metric .num {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .metric .label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: flex-end;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    select, input[type="search"] {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.95rem;
+      min-width: 160px;
+    }
+    input[type="search"] { min-width: 200px; flex: 1; }
+    select:focus, input:focus {
+      outline: 2px solid var(--accent-dim);
+      outline-offset: 1px;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.75rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: sticky;
+      top: 0;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(61, 214, 140, 0.04); }
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    .chip {
+      display: inline-block;
+      background: var(--chip);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.75rem;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .chip.type-indoor { border-color: #3d6a9d; }
+    .chip.type-outdoor { border-color: #3d8a5a; }
+    .chip.type-auto { border-color: #8a6a3d; }
+    .chip.type-public { border-color: #6a5a8a; }
+    .empty {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+    footer {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .count {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Bangkok tennis courts</h1>
+      <p class="subtitle">Draft directory of bookable venues — not live court slots.</p>
+      <div class="banner">
+        Live open slots usually need LINE, phone, or login. This page is a finder with booking links, not a real-time availability board.
+      </div>
+    </header>
+
+    <div class="metrics" id="metrics"></div>
+
+    <div class="filters">
+      <div class="filter-group">
+        <label for="area">Area</label>
+        <select id="area">
+          <option value="">All areas</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="type">Type</label>
+        <select id="type">
+          <option value="">All types</option>
+        </select>
+      </div>
+      <div class="filter-group" style="flex:1; min-width:200px;">
+        <label for="q">Search</label>
+        <input type="search" id="q" placeholder="Name, booking, notes…" />
+      </div>
+    </div>
+
+    <p class="count" id="count"></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Venue</th>
+            <th>Area</th>
+            <th>Type</th>
+            <th>Courts / notes</th>
+            <th>Hours</th>
+            <th>Price</th>
+            <th>Book</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <footer>
+      As of: <span id="asof"></span> · Draft for GitHub Pages · Data may change — confirm on each venue’s booking page.
+    </footer>
+  </div>
+
+  <script>
+    const AS_OF = "Fri 6 Nov 2026, 17:42 Asia/Bangkok";
+
+    const VENUES = [
+      {
+        name: "The Racquet Club (RQ49)",
+        area: "Sukhumvit / On Nut",
+        type: "Indoor",
+        courts: "Multi-court club",
+        hours: "07:00–21:00",
+        price: "Day pass / member",
+        bookVia: "Phone/LINE @RQSport",
+        url: "https://sport.rq49bkk.com/reservations",
+        note: "Sukhumvit 49"
+      },
+      {
+        name: "Troops Tennis Academy (ex Spin & Slice)",
+        area: "Sukhumvit / On Nut",
+        type: "Outdoor",
+        courts: "6 hard",
+        hours: "06:00–22:00",
+        price: "฿350–450/hr",
+        bookVia: "LINE @troopstennis",
+        url: "https://www.breakers-tennis.com/clubs/thailand/bangkok/spin-and-slice",
+        note: ""
+      },
+      {
+        name: "Simoorgh Tennis Academy",
+        area: "Sukhumvit / On Nut",
+        type: "Outdoor",
+        courts: "4 hard",
+        hours: "Check venue",
+        price: "~฿180–350/hr",
+        bookVia: "Phone/OnCourt",
+        url: "https://getoncourt.app/en/courts/simoorgh-tennis-academy",
+        note: ""
+      },
+      {
+        name: "APF Academies",
+        area: "Sukhumvit / On Nut",
+        type: "Indoor",
+        courts: "Indoor covered",
+        hours: "Closed Wed",
+        price: "~฿800–900/hr",
+        bookVia: "Phone",
+        url: "https://apfacademies.net/en",
+        note: ""
+      },
+      {
+        name: "Crystal Sports",
+        area: "Lat Phrao / Ramkhamhaeng",
+        type: "Indoor",
+        courts: "~8 covered",
+        hours: "~06:00–24:00",
+        price: "฿500–600/hr",
+        bookVia: "Online",
+        url: "https://crystalsports-booking.kegroup.co.th/booking.php",
+        note: ""
+      },
+      {
+        name: "Dropshot Auto Tennis",
+        area: "Lat Phrao / Ramkhamhaeng",
+        type: "Auto",
+        courts: "Indoor AC / ball machine",
+        hours: "Early–late",
+        price: "Check site",
+        bookVia: "Website",
+        url: "https://www.dropshotactive.com/booking",
+        note: ""
+      },
+      {
+        name: "Cozy Tennis Court",
+        area: "Rama 9 / Bang Na / Lat Krabang",
+        type: "Indoor",
+        courts: "4 semi-indoor",
+        hours: "07:00–22:00",
+        price: "฿350/450",
+        bookVia: "LINE @cozytennis",
+        url: "https://www.cozytennis.com/",
+        note: ""
+      },
+      {
+        name: "Curve Tennis Club",
+        area: "Rama 9 / Bang Na / Lat Krabang",
+        type: "Indoor",
+        courts: "5 indoor",
+        hours: "06:00–00:00",
+        price: "From ฿600/hr",
+        bookVia: "OnCourt",
+        url: "https://getoncourt.app/en/courts/curve-tennis-club",
+        note: ""
+      },
+      {
+        name: "CV Sport Club",
+        area: "Rama 9 / Bang Na / Lat Krabang",
+        type: "Outdoor",
+        courts: "Club",
+        hours: "~07:00–22:00",
+        price: "Check OnCourt",
+        bookVia: "OnCourt",
+        url: "https://getoncourt.app/en",
+        note: ""
+      },
+      {
+        name: "Le Smash Club",
+        area: "Chong Nonsi / Siam",
+        type: "Outdoor",
+        courts: "7 hard",
+        hours: "06:00–22:00",
+        price: "฿160/280",
+        bookVia: "Website",
+        url: "https://lesmashclub.com/",
+        note: ""
+      },
+      {
+        name: "Sirisuk Tennis Court",
+        area: "Chong Nonsi / Siam",
+        type: "Outdoor",
+        courts: "Club",
+        hours: "~06:00–23:00",
+        price: "Check FB",
+        bookVia: "Facebook",
+        url: "https://www.facebook.com/sirisukclub/",
+        note: ""
+      },
+      {
+        name: "Olympic Club (Pathumwan Princess)",
+        area: "Chong Nonsi / Siam",
+        type: "Outdoor",
+        courts: "Rooftop",
+        hours: "Hotel hours",
+        price: "~฿500–700",
+        bookVia: "Hotel desk",
+        url: "https://www.pprincess.com/wellness/the-olympic-club.html",
+        note: ""
+      },
+      {
+        name: "Lumphini Park tennis courts",
+        area: "Chong Nonsi / Siam",
+        type: "Public",
+        courts: "Public outdoor",
+        hours: "Park hours",
+        price: "Public rates",
+        bookVia: "Park app",
+        url: "https://www.autoplay24.com/blog/tennis-courts-bangkok/",
+        note: ""
+      },
+      {
+        name: "Autoplay",
+        area: "Srinakarin / Phatthanakan",
+        type: "Auto",
+        courts: "Ball-machine",
+        hours: "Check LINE",
+        price: "Check LINE",
+        bookVia: "LINE @autoplay",
+        url: "https://www.autoplay24.com/",
+        note: ""
+      },
+      {
+        name: "Tennistar",
+        area: "Srinakarin / Phatthanakan",
+        type: "Auto",
+        courts: "Ball-machine",
+        hours: "Check LINE",
+        price: "Check LINE",
+        bookVia: "LINE @tennistar",
+        url: "https://www.autoplay24.com/blog/tennis-courts-bangkok/",
+        note: ""
+      },
+      {
+        name: "Passion Auto Tennis",
+        area: "Srinakarin / Phatthanakan",
+        type: "Auto",
+        courts: "Auto tennis",
+        hours: "~06:00–22:00",
+        price: "Check LINE",
+        bookVia: "LINE @passion.autotennis",
+        url: "https://www.autoplay24.com/blog/tennis-courts-bangkok/",
+        note: ""
+      }
+    ];
+
+    function typeClass(t) {
+      const k = (t || "").toLowerCase();
+      if (k.includes("indoor")) return "type-indoor";
+      if (k.includes("outdoor")) return "type-outdoor";
+      if (k.includes("auto")) return "type-auto";
+      if (k.includes("public")) return "type-public";
+      return "";
+    }
+
+    function unique(arr) {
+      return [...new Set(arr)].sort();
+    }
+
+    function esc(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    const areaSel = document.getElementById("area");
+    const typeSel = document.getElementById("type");
+    const qInput = document.getElementById("q");
+    const tbody = document.getElementById("tbody");
+    const countEl = document.getElementById("count");
+    const metricsEl = document.getElementById("metrics");
+
+    document.getElementById("asof").textContent = AS_OF;
+
+    unique(VENUES.map(v => v.area)).forEach(a => {
+      const o = document.createElement("option");
+      o.value = a;
+      o.textContent = a;
+      areaSel.appendChild(o);
+    });
+    unique(VENUES.map(v => v.type)).forEach(t => {
+      const o = document.createElement("option");
+      o.value = t;
+      o.textContent = t;
+      typeSel.appendChild(o);
+    });
+
+    function filtered() {
+      const area = areaSel.value;
+      const type = typeSel.value;
+      const q = qInput.value.trim().toLowerCase();
+      return VENUES.filter(v => {
+        if (area && v.area !== area) return false;
+        if (type && v.type !== type) return false;
+        if (q) {
+          const hay = [v.name, v.area, v.type, v.courts, v.hours, v.price, v.bookVia, v.note, v.url]
+            .join(" ")
+            .toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderMetrics(list) {
+      const areas = unique(list.map(v => v.area)).length;
+      const indoor = list.filter(v => /indoor/i.test(v.type)).length;
+      const outdoor = list.filter(v => /outdoor/i.test(v.type)).length;
+      const auto = list.filter(v => /auto/i.test(v.type)).length;
+      metricsEl.innerHTML = `
+        <div class="metric"><div class="num">${list.length}</div><div class="label">Venues shown</div></div>
+        <div class="metric"><div class="num">${areas}</div><div class="label">Areas</div></div>
+        <div class="metric"><div class="num">${indoor}</div><div class="label">Indoor</div></div>
+        <div class="metric"><div class="num">${outdoor}</div><div class="label">Outdoor</div></div>
+        <div class="metric"><div class="num">${auto}</div><div class="label">Auto / machine</div></div>
+      `;
+    }
+
+    function render() {
+      const list = filtered();
+      renderMetrics(list);
+      countEl.textContent = `Showing ${list.length} of ${VENUES.length} venues`;
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty">No venues match these filters.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = list.map(v => `
+        <tr>
+          <td>
+            <strong>${esc(v.name)}</strong>
+            ${v.note ? `<div style="color:var(--muted);font-size:0.8rem;margin-top:0.2rem">${esc(v.note)}</div>` : ""}
+          </td>
+          <td>${esc(v.area)}</td>
+          <td><span class="chip ${typeClass(v.type)}">${esc(v.type)}</span></td>
+          <td>${esc(v.courts)}</td>
+          <td>${esc(v.hours)}</td>
+          <td>${esc(v.price)}</td>
+          <td>
+            <a href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">Book / site</a>
+            <div style="color:var(--muted);font-size:0.75rem;margin-top:0.2rem">${esc(v.bookVia)}</div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    areaSel.addEventListener("change", render);
+    typeSel.addEventListener("change", render);
+    qInput.addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>
