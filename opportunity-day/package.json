@@ -1,0 +1,9 @@
+{
+  "name": "opportunity-day",
+  "private": true,
+  "description": "Read-only static Opportunity Day reader. Tests do not install packages.",
+  "scripts": {
+    "build": "python3 scripts/build_snapshot.py",
+    "test": "node --test tests/*.test.js"
+  }
+}
