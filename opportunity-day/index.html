@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opportunity Day — unofficial SET/mai schedule</title>
+  <meta name="description" content="Read-only research view of the public SET Opportunity Day Q3/2026 schedule and a partial archive sample. Not the Stock Exchange of Thailand website.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <p class="eyebrow">Unofficial read-only research view · Asia/Bangkok (UTC+7)</p>
+      <h1>Opportunity Day</h1>
+      <p class="lede">Schedule and captured session pages for SET and mai company presentations. Public visitors can search and filter. There is no login and no way to edit this snapshot.</p>
+      <p class="identity">Not a Stock Exchange of Thailand site. Videos and decks stay on the official pages linked below.</p>
+      <ul class="official-links">
+        <li><a href="https://opportunity-day.setgroup.or.th/en" target="_blank" rel="noopener noreferrer">Official portal</a></li>
+        <li><a href="https://opportunity-day.setgroup.or.th/en/calendar" target="_blank" rel="noopener noreferrer">Official calendar</a></li>
+        <li><a href="https://opportunity-day.setgroup.or.th/en/search" target="_blank" rel="noopener noreferrer">Full official archive</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <aside id="coverage" class="coverage" aria-label="Coverage and source snapshot"></aside>
+
+    <main id="main">
+      <div class="tablist" role="tablist" aria-label="Opportunity Day views">
+        <button type="button" role="tab" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="true" tabindex="0" data-tab="upcoming">Upcoming schedule</button>
+        <button type="button" role="tab" id="tab-published" aria-controls="panel-published" aria-selected="false" tabindex="-1" data-tab="published">Published sessions</button>
+      </div>
+
+      <form id="filters" class="filters" role="search" aria-label="Search and filter sessions">
+        <div class="filter-search">
+          <label for="q">Search symbol, English name, or Thai session title</label>
+          <input id="q" name="q" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. PTT, CPALL, or a Thai title" enterkeyhint="search">
+        </div>
+        <div>
+          <label for="reporting-period">Reporting period</label>
+          <select id="reporting-period" name="reporting-period"></select>
+        </div>
+        <div>
+          <label for="industry">Industry</label>
+          <select id="industry" name="industry"></select>
+        </div>
+        <div>
+          <label for="event-type">Event type</label>
+          <select id="event-type" name="event-type"></select>
+        </div>
+        <div>
+          <label for="origin">Record source</label>
+          <select id="origin" name="origin">
+            <option value="">All records in this tab</option>
+            <option value="pdf">PDF schedule row</option>
+            <option value="archive_only">Archive card not on that PDF date</option>
+          </select>
+        </div>
+        <div>
+          <label for="on-date">Date</label>
+          <input id="on-date" name="on-date" type="date">
+        </div>
+        <div class="filter-check">
+          <label for="include-analyst">
+            <input id="include-analyst" name="include-analyst" type="checkbox">
+            Show IAA analyst sessions
+          </label>
+        </div>
+        <div class="filter-actions">
+          <button type="button" id="clear-filters">Clear filters</button>
+          <div class="view-toggle" role="group" aria-label="Upcoming layout">
+            <button type="button" id="view-list" aria-pressed="true">List</button>
+            <button type="button" id="view-grid" aria-pressed="false">Day grid</button>
+          </div>
+        </div>
+      </form>
+      <p id="filter-hint" class="hint">Press / to focus search. Market is not a filter: SET, mai, and LiVEx were not in the source files, and this page does not guess them.</p>
+      <p id="result-count" class="result-count" aria-live="polite"></p>
+
+      <section id="panel-upcoming" role="tabpanel" aria-labelledby="tab-upcoming" tabindex="0">
+        <div id="window-summary"></div>
+        <div id="upcoming-results"></div>
+        <div id="unpublished-notice"></div>
+      </section>
+
+      <section id="panel-published" role="tabpanel" aria-labelledby="tab-published" tabindex="0" hidden>
+        <div id="published-intro"></div>
+        <div id="published-results"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <h2>Sources checked for this snapshot</h2>
+      <div id="source-notes"></div>
+    </footer>
+  </div>
+
+  <dialog id="company-dialog" aria-labelledby="company-title"></dialog>
+  <script src="logic.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
