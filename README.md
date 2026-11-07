@@ -42,7 +42,7 @@ Workflow: `.github/workflows/probe-booking-sources.yml`
 
 - Cron `17 * * * *` (UTC). That is every hour of every day, including Saturday and Sunday. The minute is 17 so the job is less likely to sit in the top-of-hour queue. GitHub can still start it late.
 - The schedule runs only from the default branch. Merging this workflow to `main` is what turns it on. It also has **Run workflow** for a manual run.
-- The job writes `data/availability.json`, commits it as `github-actions[bot]`, and deploys the site with `actions/upload-pages-artifact` and `actions/deploy-pages`.
+- The job writes `data/availability.json`, tries to commit it as `github-actions[bot]`, and deploys the **whole public tree** with `actions/upload-pages-artifact` and `actions/deploy-pages`. That tree includes the tennis pages and any other tracked site paths, including `opportunity-day/`. CI metadata under `.github/` is left out. A rejected probe commit does not remove those paths from the artifact.
 - A commit made with `GITHUB_TOKEN` does **not** trigger the branch Pages build. The deploy step is what publishes the hourly result. GitHub’s docs: [Configuring a publishing source](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
 ### Setup after merge
@@ -61,7 +61,8 @@ No repository secrets are required.
 - `data/sources.json` — which URL is probed, or why it is not
 - `data/availability.json` — last probe result, written by the script
 - `scripts/refresh_availability.py` — the checker
-- `scripts/test_refresh_availability.py` — failure and “do not invent slots” tests
+- `scripts/stage_public_site.py` — copies the tracked public site into the Pages artifact
+- `scripts/test_refresh_availability.py` — failure, “do not invent slots”, and full-site staging tests
 
 ## Local
 

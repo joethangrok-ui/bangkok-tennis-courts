@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
+from stage_public_site import stage_public_site
 from refresh_availability import (
     ProbeError,
     assert_public_url,
@@ -301,6 +303,23 @@ class ProbeTests(unittest.TestCase):
         linked = {source_id for venue in venues_doc["venues"] for source_id in venue["sourceIds"]}
         self.assertEqual(linked, source_ids)
         self.assertEqual(len(venues_doc["venues"]), 16)
+
+    def test_pages_artifact_keeps_opportunity_day_and_tennis_data(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "site"
+            copied = stage_public_site(ROOT, dest)
+            self.assertIn("index.html", copied)
+            self.assertIn("data/availability.json", copied)
+            self.assertIn("opportunity-day/index.html", copied)
+            self.assertIn("opportunity-day/data/snapshot.json", copied)
+            self.assertNotIn(".github/workflows/probe-booking-sources.yml", copied)
+            self.assertTrue((dest / "opportunity-day" / "index.html").is_file())
+            self.assertTrue((dest / "index.html").is_file())
+            self.assertIn("Not a live slot board", (dest / "index.html").read_text(encoding="utf-8"))
+        workflow = (ROOT / ".github" / "workflows" / "probe-booking-sources.yml").read_text(encoding="utf-8")
+        self.assertIn('cron: "17 * * * *"', workflow)
+        self.assertIn("python3 scripts/stage_public_site.py _site", workflow)
+        self.assertNotIn("cp index.html .nojekyll", workflow)
 
 
 if __name__ == "__main__":
