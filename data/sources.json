@@ -1,0 +1,132 @@
+{
+  "timezone": "Asia/Bangkok",
+  "staleAfterMinutes": 180,
+  "timeoutSeconds": 20,
+  "delaySeconds": 1,
+  "userAgent": "bangkok-tennis-courts-probe/1.0 (+https://github.com/joethangrok-ui/bangkok-tennis-courts; hourly public-page check; does not book)",
+  "sources": [
+    {
+      "id": "rq49-page",
+      "venueId": "rq49",
+      "title": "RQ Sport reservation page",
+      "mode": "fetch_public_page",
+      "url": "https://sport.rq49bkk.com/reservations",
+      "access": "Public page tells visitors to phone 02 118 7330 or LINE @RQSport. Reviewed 7 Nov 2026: no slot list in the page. robots.txt allows the page. This job does not message the venue."
+    },
+    {
+      "id": "troops-line",
+      "venueId": "troops",
+      "title": "Troops Tennis via LINE",
+      "mode": "not_probed",
+      "access": "Directory booking method is LINE @troopstennis. The draft URL is a Breakers club directory page, not a slot feed. Not probed. This job does not message LINE."
+    },
+    {
+      "id": "oncourt-simoorgh",
+      "venueId": "simoorgh",
+      "title": "OnCourt profile: Simoorgh Tennis Academy",
+      "mode": "fetch_public_page",
+      "url": "https://getoncourt.app/en/courts/simoorgh-tennis-academy",
+      "access": "Public OnCourt court profile. It can include schema.org opening hours. OnCourt robots.txt disallows /api/ and /ingest/; this job never requests those paths. Slot times stay inside the OnCourt product. No public availability API is documented."
+    },
+    {
+      "id": "apf-home",
+      "venueId": "apf",
+      "title": "APF Academies site",
+      "mode": "fetch_public_page",
+      "url": "https://apfacademies.net/en",
+      "access": "Public club site. Reviewed 7 Nov 2026: no date/time court feed. Booking in the directory is by phone."
+    },
+    {
+      "id": "crystal-booking",
+      "venueId": "crystal",
+      "title": "Crystal Sports booking page",
+      "mode": "fetch_public_page",
+      "url": "https://crystalsports-booking.kegroup.co.th/booking.php",
+      "access": "Public booking page. Reviewed 7 Nov 2026: the HTML is a date-picker shell and does not include slot times. No documented availability API was found. This job does not call private endpoints."
+    },
+    {
+      "id": "dropshot-booking",
+      "venueId": "dropshot",
+      "title": "Dropshot booking page",
+      "mode": "fetch_public_page",
+      "url": "https://www.dropshotactive.com/booking",
+      "access": "Public booking page. Reviewed 7 Nov 2026: the HTML describes choosing a slot but does not list times. No documented availability API was found. This job does not read the site's private client endpoints."
+    },
+    {
+      "id": "cozy-home",
+      "venueId": "cozy",
+      "title": "Cozy Tennis site",
+      "mode": "fetch_public_page",
+      "url": "https://www.cozytennis.com/",
+      "access": "Public homepage. A successful GET reads a club page that tells players to check free courts on LINE @cozytennis. It has no supported slot feed. Some requests are replaced by a bot check; those are recorded as a bot wall, not as free or full courts. This job does not message LINE and does not solve the check."
+    },
+    {
+      "id": "oncourt-curve",
+      "venueId": "curve",
+      "title": "OnCourt profile: Curve Tennis Club",
+      "mode": "fetch_public_page",
+      "url": "https://getoncourt.app/en/courts/curve-tennis-club",
+      "access": "Public OnCourt court profile. It can include schema.org opening hours. OnCourt robots.txt disallows /api/ and /ingest/; this job never requests those paths. Slot times stay inside the OnCourt product. No public availability API is documented."
+    },
+    {
+      "id": "oncourt-cv",
+      "venueId": "cv-sport",
+      "title": "OnCourt profile: CV Sport Club",
+      "mode": "fetch_public_page",
+      "url": "https://getoncourt.app/en/courts/cv-sport-club",
+      "access": "Public court profile verified at this URL on 7 Nov 2026. The draft book link is the OnCourt home page, not this profile. Same OnCourt limits: opening hours may be in JSON-LD; /api/ is not requested; slots are not public."
+    },
+    {
+      "id": "lesmash-login",
+      "venueId": "le-smash",
+      "title": "Le Smash booking login",
+      "mode": "fetch_public_page",
+      "url": "https://booking.lesmashclub.com/login.php?member_type=non-member",
+      "access": "Official booking entry, including the non-member path, is a login page. Reviewed 7 Nov 2026. This job does not log in, so it cannot see the court grid."
+    },
+    {
+      "id": "sirisuk-facebook",
+      "venueId": "sirisuk",
+      "title": "Sirisuk Facebook",
+      "mode": "not_probed",
+      "access": "Directory booking method is the club Facebook page. Not probed. This job does not call Facebook."
+    },
+    {
+      "id": "olympic-page",
+      "venueId": "olympic",
+      "title": "Pathumwan Princess Olympic Club page",
+      "mode": "fetch_public_page",
+      "url": "https://www.pprincess.com/wellness/the-olympic-club.html",
+      "access": "Public hotel URL. Reviewed 7 Nov 2026 in a normal browser: the page describes a rooftop court and a phone extension, with no slot feed. This checker's request receives an AWS human-verification response (HTTP 405). That wall is not solved and is not treated as availability. This job does not call the hotel."
+    },
+    {
+      "id": "lumphini-cstd",
+      "venueId": "lumphini",
+      "title": "Lumphini courts via CSTD Smart Member",
+      "mode": "not_probed",
+      "access": "Hourly court booking is in the Bangkok CSTD Smart Member app after recreation-center membership. No public slot API was found. publicspace.bangkok.go.th lists the tennis courts as an event space with agency review, not an hourly slot board. The draft URL is a third-party article. Not probed. This job does not create an account."
+    },
+    {
+      "id": "autoplay-home",
+      "venueId": "autoplay",
+      "title": "Autoplay site",
+      "mode": "fetch_public_page",
+      "url": "https://www.autoplay24.com/",
+      "access": "Public site says to book on LINE @autoplay and that slot prices are on that booking screen. Reviewed 7 Nov 2026: the page does not list open times. Words such as live availability are not treated as slots. This job does not message LINE."
+    },
+    {
+      "id": "tennistar-line",
+      "venueId": "tennistar",
+      "title": "Tennistar via LINE",
+      "mode": "not_probed",
+      "access": "Directory booking method is LINE @tennistar. The draft URL is an Autoplay article, not a Tennistar feed. Not probed. This job does not message LINE."
+    },
+    {
+      "id": "passion-line",
+      "venueId": "passion",
+      "title": "Passion Auto Tennis via LINE",
+      "mode": "not_probed",
+      "access": "Directory booking method is LINE @passion.autotennis. The draft URL is an Autoplay article, not a Passion feed. Not probed. This job does not message LINE."
+    }
+  ]
+}
